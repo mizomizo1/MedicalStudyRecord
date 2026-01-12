@@ -1,0 +1,29 @@
+name: 📊 模試レビュー
+description: 模試全体の振り返り
+title: "【模試】〇年〇月 模試名"
+labels:
+  - 模試
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 全体所感
+      placeholder: 難易度・手応え
+    validations:
+      required: true
+
+  - type: textarea
+    id: weak
+    attributes:
+      label: 弱点分野
+      placeholder: 分野・理由
+    validations:
+      required: true
+
+  - type: textarea
+    id: action
+    attributes:
+      label: 次回までの対策
+      placeholder: 具体的に何をやるか
+    validations:
+      required: true
