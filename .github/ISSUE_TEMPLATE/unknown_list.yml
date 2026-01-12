@@ -1,0 +1,48 @@
+name: ❓ 知らないことメモ（箇条書き）
+description: 勉強中に出てきた「知らない」を一旦すべて書き出す
+title: "【未理解リスト】〇年〇月〇日 / 分野"
+labels:
+  - 未整理
+  - 知識不足
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 使い方
+        - 思考を止めずに「知らないこと」を箇条書きで列挙
+        - 今は調べない
+        - 後で1項目ずつ別Issueに切り出してもOK
+
+  - type: textarea
+    id: unknowns
+    attributes:
+      label: 知らないこと（箇条書き）
+      description: 1行＝1トピックで書く
+      placeholder: |
+        - ○○と△△の違いが分からない
+        - なぜ□□が第一選択なのか
+        - この検査の基準値
+        - この薬の禁忌
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: 発生源（任意）
+      description: QB・模試・講義など
+      placeholder: |
+        QB2024 Vol.2
+        第118回 国試
+        ○月模試
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: next
+    attributes:
+      label: 次のアクション
+      options:
+        - label: 後で調べる
+        - label: 個別Issueに分解する
+        - label: イヤーノートで確認
