@@ -1,0 +1,88 @@
+name: 🩺 国試問題レビュー
+description: 医師国家試験の問題・間違い・重要論点を整理する
+title: "【第○回国試】問題番号○○：疾患名 / 論点"
+labels:
+  - 復習必要
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 分野
+      options:
+        - 内科
+        - 外科
+        - 小児科
+        - 産婦人科
+        - 精神科
+        - 皮膚科
+        - 救急
+        - 公衆衛生
+    validations:
+      required: true
+
+  - type: dropdown
+    id: importance
+    attributes:
+      label: 出題区分
+      options:
+        - 必修
+        - 一般
+        - 臨床
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mistake
+    attributes:
+      label: 間違えた理由
+      options:
+        - 知識不足
+        - 読み違い
+        - 思い込み
+        - 鑑別ミス
+        - 計算ミス
+        - 時間不足
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 問題要約
+      description: 問題文を自分の言葉で簡潔に
+      placeholder: 何を聞かれている問題か？
+    validations:
+      required: true
+
+  - type: textarea
+    id: answer
+    attributes:
+      label: 正解と理由
+      placeholder: 正解選択肢とその理由
+    validations:
+      required: true
+
+  - type: textarea
+    id: learning
+    attributes:
+      label: 覚えるべきポイント
+      description: 国試本番で使える一文
+      placeholder: 「〇〇疾患では△△が第一選択」
+    validations:
+      required: true
+
+  - type: textarea
+    id: differential
+    attributes:
+      label: 鑑別・関連疾患
+      placeholder: 似た疾患との違い
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: review
+    attributes:
+      label: 再確認
+      options:
+        - label: 1週間後に復習
+        - label: 1か月後に復習
