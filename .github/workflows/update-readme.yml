@@ -1,13 +1,3 @@
-
----
-
-# ✅ GitHub Actions（update-readme.yml フルコード）
-
-👉 `.github/workflows/update-readme.yml` に **そのまま保存**
-
-```yaml
-name: Update README Simple Dashboard
-
 on:
   workflow_dispatch:
   issues:
