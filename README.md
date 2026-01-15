@@ -7,7 +7,7 @@
 <h1>0.0 <sub>h</sub></h1>
 
 ### 📝 QB 累計  
-<h1>0 <sub>問</sub></h1>
+<h1>28 <sub>問</sub></h1>
 
 </div>
 <!-- TOTALS:END -->
