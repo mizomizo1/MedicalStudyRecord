@@ -1,0 +1,41 @@
+name: "📝 QB"
+description: "QB 問題演習（問数管理）"
+title: "QB｜"
+labels:
+  - qb
+body:
+  - type: input
+    id: subject
+    attributes:
+      label: 科目
+      placeholder: 循環器
+    validations:
+      required: true
+
+  - type: input
+    id: count
+    attributes:
+      label: 演習問数
+      description: 数字のみ（例：30）
+      placeholder: "30"
+    validations:
+      required: true
+
+  - type: textarea
+    id: memo
+    attributes:
+      label: メモ（任意）
+      description: 間違えたポイント・復習メモなど
+      placeholder: 例）房室ブロックの鑑別が弱い
+    validations:
+      required: false
+
+  - type: textarea
+    id: fixed_format
+    attributes:
+      label: （自動集計用・変更しない）
+      placeholder: "この欄は編集しないでください"
+      value: |
+        演習問数：30
+    validations:
+      required: true
