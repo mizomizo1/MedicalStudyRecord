@@ -1,0 +1,34 @@
+name: "📺 Q-Assist（Medilink形式）"
+description: "Q-Assist 動画視聴（講座｜講義｜セクション）"
+title: "Q-Assist｜"
+labels: [q-assist]
+body:
+  - type: input
+    id: course
+    attributes:
+      label: 講座名
+      placeholder: 例）内科総論
+    validations:
+      required: true
+
+  - type: input
+    id: lecture
+    attributes:
+      label: 講義名
+      placeholder: 例）心不全
+    validations:
+      required: true
+
+  - type: input
+    id: part
+    attributes:
+      label: Part / セクション
+      placeholder: 例）Part2 治療 / 病態生理
+    validations:
+      required: false
+
+  - type: textarea
+    id: memo
+    attributes:
+      label: メモ
+      placeholder: 国試に出そうなところ・引っかけポイント
