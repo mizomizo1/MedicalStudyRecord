@@ -3,9 +3,7 @@
 GitHub Issues を学習ログとして使う  
 （Q-Assist / Medilink = 時間、QB = 問数）
 
----
-
-## ⏱ 累積学習量
+## ⏱ 学習サマリー
 
 <!-- TOTALS:START -->
 <div align="center">
@@ -21,13 +19,11 @@ GitHub Issues を学習ログとして使う
 
 ---
 
-## 📅 日毎の学習ヒートマップ
+## ℹ️ 運用ルール（これだけ）
 
-<!-- HEATMAP:START -->
-```mermaid
-%%{init: {"theme": "base"}}%%
-calendar
-    title 学習ヒートマップ
-    2026-01-01 : 0
-
-<!-- HEATMAP:END -->
+- Issue を **Close = 学習完了**
+- 動画系 Issue 本文  
+  `講義時間（分）：45`
+- QB Issue 本文  
+  `演習問数：30`
+- README は **量だけを見る**
