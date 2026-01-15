@@ -29,13 +29,3 @@ body:
       placeholder: 例）房室ブロックの鑑別が弱い
     validations:
       required: false
-
-  - type: textarea
-    id: fixed_format
-    attributes:
-      label: （自動集計用・変更しない）
-      placeholder: "この欄は編集しないでください"
-      value: |
-        演習問数：30
-    validations:
-      required: true
