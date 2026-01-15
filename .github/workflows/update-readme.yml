@@ -57,19 +57,22 @@ jobs:
               issues.extend(data)
               page += 1
 
-          total_minutes = 0
-          total_qb = 0
+            total_minutes = 0
+            total_qb = 0
+            
+            for issue in issues:
+                body = issue.get("body") or ""
+            
+                # 講義時間（分）
+                m_time = re.search(r"講義時間（分）\s*\n\s*(\d+)", body)
+                if m_time:
+                    total_minutes += int(m_time.group(1))
+            
+                # QB 問数
+                m_qb = re.search(r"演習問数\s*\n\s*(\d+)", body)
+                if m_qb:
+                    total_qb += int(m_qb.group(1))
 
-          for issue in issues:
-              body = issue.get("body") or ""
-
-              m_time = re.search(r"講義時間（分）[:：]\s*(\d+)", body)
-              if m_time:
-                  total_minutes += int(m_time.group(1))
-
-              m_qb = re.search(r"演習問数[:：]\s*(\d+)", body)
-              if m_qb:
-                  total_qb += int(m_qb.group(1))
 
           total_hours = round(total_minutes / 60, 1)
 
