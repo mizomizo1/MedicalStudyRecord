@@ -1,4 +1,12 @@
-name: Update README Dashboard
+
+---
+
+# ✅ GitHub Actions（update-readme.yml フルコード）
+
+👉 `.github/workflows/update-readme.yml` に **そのまま保存**
+
+```yaml
+name: Update README Simple Dashboard
 
 on:
   workflow_dispatch:
@@ -14,17 +22,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      - name: Install dependencies
-        run: |
-          pip install requests
 
       - name: Update README
         env:
@@ -35,30 +37,24 @@ jobs:
           import os
           import re
           import requests
-          from datetime import datetime, timedelta
+          from collections import defaultdict
 
-          # =======================
-          # GitHub API 設定
-          # =======================
           token = os.environ["GITHUB_TOKEN"]
           repo = os.environ["REPO"]
+
           headers = {
               "Authorization": f"Bearer {token}",
               "Accept": "application/vnd.github+json"
           }
 
-          # =======================
+          # -----------------------
           # Issue 取得（closed）
-          # =======================
+          # -----------------------
           issues = []
           page = 1
           while True:
               url = f"https://api.github.com/repos/{repo}/issues"
-              params = {
-                  "state": "closed",
-                  "per_page": 100,
-                  "page": page
-              }
+              params = {"state": "closed", "per_page": 100, "page": page}
               r = requests.get(url, headers=headers, params=params)
               data = r.json()
               if not data:
@@ -66,116 +62,93 @@ jobs:
               issues.extend(data)
               page += 1
 
-          # =======================
-          # 集計用変数
-          # =======================
-          qassist_min = 0
-          medilink_min = 0
-          qb_total = 0
+          total_minutes = 0
+          total_qb = 0
+          daily_minutes = defaultdict(int)
 
-          # QB 科目別
-          qb_by_subject = {}
-
-          # =======================
-          # Issue 集計
-          # =======================
+          # -----------------------
+          # 集計
+          # -----------------------
           for issue in issues:
-              labels = {l["name"] for l in issue.get("labels", [])}
               body = issue.get("body") or ""
+              closed_at = issue.get("closed_at")
+              if not closed_at:
+                  continue
 
-              # 講義時間（分）
+              date = closed_at[:10]
+
               m_time = re.search(r"講義時間（分）[:：]\s*(\d+)", body)
-              minutes = int(m_time.group(1)) if m_time else 0
+              if m_time:
+                  minutes = int(m_time.group(1))
+                  total_minutes += minutes
+                  daily_minutes[date] += minutes
 
-              # QB 問数
               m_qb = re.search(r"演習問数[:：]\s*(\d+)", body)
-              qb_count = int(m_qb.group(1)) if m_qb else 0
+              if m_qb:
+                  total_qb += int(m_qb.group(1))
 
-              # QB 科目
-              m_subject = re.search(r"科目\s*[:：]?\s*(.+)", body)
-              subject = m_subject.group(1).strip() if m_subject else "その他"
+          total_hours = round(total_minutes / 60, 1)
 
-              if "q-assist" in labels:
-                  qassist_min += minutes
-
-              if "medilink" in labels:
-                  medilink_min += minutes
-
-              if "qb" in labels:
-                  qb_total += qb_count
-                  qb_by_subject[subject] = qb_by_subject.get(subject, 0) + qb_count
-
-          # =======================
-          # 単位変換
-          # =======================
-          qassist_h = round(qassist_min / 60, 1)
-          medilink_h = round(medilink_min / 60, 1)
-          total_h = round(qassist_h + medilink_h, 1)
-
-          # =======================
+          # -----------------------
           # README 読み込み
-          # =======================
+          # -----------------------
           with open("README.md", "r", encoding="utf-8") as f:
               readme = f.read()
 
-          # =======================
-          # サマリー生成
-          # =======================
-          summary = f"""| 指標 | 値 |
-          |---|---|
-          | **総学習時間** | **{total_h}時間** |
-          | **QB 累計** | **{qb_total}問** |"""
+          # -----------------------
+          # 累積表示
+          # -----------------------
+          totals_block = f"""
+<div align="center">
 
-          # =======================
-          # Mermaid：教材別時間
-          # =======================
-          material_chart = f"""```mermaid
-          %%{{init: {{"theme": "base"}}}}%%
-          xychart-beta
-              title "教材別 学習時間（h）"
-              x-axis ["Q-Assist", "Medilink"]
-              y-axis "時間（h）" 0 --> 80
-              bar [{qassist_h}, {medilink_h}]
-          ```"""
+### 🧠 総学習時間  
+# **{total_hours} h**
 
-          # =======================
-          # Mermaid：QB 科目別
-          # =======================
-          subjects = list(qb_by_subject.keys())
-          values = list(qb_by_subject.values())
+### 📝 QB 累計  
+# **{total_qb} 問**
 
-          qb_subject_chart = f"""```mermaid
-          %%{{init: {{"theme": "base"}}}}%%
-          xychart-beta
-              title "QB 科目別 演習問数"
-              x-axis {subjects}
-              y-axis "問数" 0 --> {max(values + [10])}
-              bar {values}
-          ```"""
+</div>
+""".strip()
 
-          # =======================
-          # README 更新
-          # =======================
-          def replace_block(name, content, text):
-              pattern = rf"<!-- {name}:START -->.*?<!-- {name}:END -->"
-              return re.sub(
-                  pattern,
-                  f"<!-- {name}:START -->\n{content}\n<!-- {name}:END -->",
-                  text,
-                  flags=re.S
-              )
+          readme = re.sub(
+              r"<!-- TOTALS:START -->.*?<!-- TOTALS:END -->",
+              f"<!-- TOTALS:START -->\n{totals_block}\n<!-- TOTALS:END -->",
+              readme,
+              flags=re.S
+          )
 
-          readme = replace_block("SUMMARY", summary, readme)
-          readme = replace_block("MATERIAL_TIME_CHART", material_chart, readme)
-          readme = replace_block("QB_SUBJECT_CHART", qb_subject_chart, readme)
+          # -----------------------
+          # ヒートマップ生成
+          # -----------------------
+          if not daily_minutes:
+              daily_minutes = {"2026-01-01": 0}
 
-          # =======================
-          # README 書き込み
-          # =======================
+          heatmap_lines = "\n".join(
+              f"    {date} : {minutes}"
+              for date, minutes in sorted(daily_minutes.items())
+          )
+
+          heatmap_block = f"""```mermaid
+%%{{init: {{"theme": "base"}}}}%%
+calendar
+    title 学習ヒートマップ
+{heatmap_lines}
+```"""
+
+          readme = re.sub(
+              r"<!-- HEATMAP:START -->.*?<!-- HEATMAP:END -->",
+              f"<!-- HEATMAP:START -->\n{heatmap_block}\n<!-- HEATMAP:END -->",
+              readme,
+              flags=re.S
+          )
+
+          # -----------------------
+          # 書き込み
+          # -----------------------
           with open("README.md", "w", encoding="utf-8") as f:
               f.write(readme)
 
-          print("README updated successfully")
+          print("README updated")
           EOF
 
       - name: Commit and push
@@ -183,5 +156,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update README dashboard"
+          git commit -m "Update README dashboard" || exit 0
           git push
