@@ -36,13 +36,3 @@ body:
       placeholder: "45"
     validations:
       required: true
-
-  - type: textarea
-    id: fixed_format
-    attributes:
-      label: （自動集計用・変更しない）
-      placeholder: "この欄は編集しないでください"
-      value: |
-        講義時間（分）：45
-    validations:
-      required: true
