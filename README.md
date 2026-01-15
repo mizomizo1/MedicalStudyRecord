@@ -10,10 +10,8 @@ GitHub Issues × Projects × Actions で管理
 <!-- SUMMARY:START -->
 | 指標 | 値 |
 |---|---|
-| **総学習時間** | **128時間30分** |
-| 今週の学習時間 | 6時間30分 |
-| **QB 累計** | **1,240問** |
-| 今週のQB | 180問 |
+| **総学習時間** | **0.0時間** |
+| **QB 累計** | **0問** |
 <!-- SUMMARY:END -->
 
 ---
@@ -27,9 +25,8 @@ xychart-beta
     title "教材別 学習時間（h）"
     x-axis ["Q-Assist", "Medilink"]
     y-axis "時間（h）" 0 --> 80
-    bar [42, 63]
-````
-
+    bar [0.0, 0.0]
+```
 <!-- MATERIAL_TIME_CHART:END -->
 
 ---
@@ -92,16 +89,14 @@ pie
 ### 科目別 問数
 
 <!-- QB_SUBJECT_CHART:START -->
-
 ```mermaid
 %%{init: {"theme": "base"}}%%
 xychart-beta
     title "QB 科目別 演習問数"
-    x-axis ["内科", "循環器", "消化器", "産婦人科", "小児科", "マイナー"]
-    y-axis "問数" 0 --> 400
-    bar [320, 210, 180, 150, 140, 240]
+    x-axis []
+    y-axis "問数" 0 --> 10
+    bar []
 ```
-
 <!-- QB_SUBJECT_CHART:END -->
 
 ### 週次 QB 演習数
