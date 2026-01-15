@@ -22,6 +22,11 @@ jobs:
         with:
           python-version: "3.11"
 
+      # 🔽 これを追加 🔽
+      - name: Install dependencies
+        run: |
+          pip install requests
+
       - name: Update README
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,20 +45,14 @@ jobs:
               "Accept": "application/vnd.github+json"
           }
 
-          # -----------------------
-          # Issue 取得（closed）
-          # -----------------------
+          # Issue取得
           issues = []
           page = 1
           while True:
               r = requests.get(
                   f"https://api.github.com/repos/{repo}/issues",
                   headers=headers,
-                  params={
-                      "state": "closed",
-                      "per_page": 100,
-                      "page": page
-                  }
+                  params={"state": "closed", "per_page": 100, "page": page}
               )
               data = r.json()
               if not data:
@@ -64,9 +63,6 @@ jobs:
           total_minutes = 0
           total_qb = 0
 
-          # -----------------------
-          # 集計
-          # -----------------------
           for issue in issues:
               body = issue.get("body") or ""
 
@@ -80,15 +76,9 @@ jobs:
 
           total_hours = round(total_minutes / 60, 1)
 
-          # -----------------------
-          # README 読み込み
-          # -----------------------
           with open("README.md", "r", encoding="utf-8") as f:
               readme = f.read()
 
-          # -----------------------
-          # サマリーブロック生成
-          # -----------------------
           totals_block = (
               "<div align=\"center\">\n\n"
               "### 🧠 総学習時間  \n"
@@ -105,13 +95,10 @@ jobs:
               flags=re.S
           )
 
-          # -----------------------
-          # README 書き込み
-          # -----------------------
           with open("README.md", "w", encoding="utf-8") as f:
               f.write(readme)
 
-          print("README updated successfully")
+          print("README updated")
           EOF
 
       - name: Commit and push
