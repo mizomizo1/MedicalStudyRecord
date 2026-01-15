@@ -1,3 +1,5 @@
+name: Update README Summary
+
 on:
   workflow_dispatch:
   issues:
@@ -27,7 +29,6 @@ jobs:
           import os
           import re
           import requests
-          from collections import defaultdict
 
           token = os.environ["GITHUB_TOKEN"]
           repo = os.environ["REPO"]
@@ -43,9 +44,11 @@ jobs:
           issues = []
           page = 1
           while True:
-              url = f"https://api.github.com/repos/{repo}/issues"
-              params = {"state": "closed", "per_page": 100, "page": page}
-              r = requests.get(url, headers=headers, params=params)
+              r = requests.get(
+                  f"https://api.github.com/repos/{repo}/issues",
+                  headers=headers,
+                  params={"state": "closed", "per_page": 100, "page": page}
+              )
               data = r.json()
               if not data:
                   break
@@ -54,24 +57,16 @@ jobs:
 
           total_minutes = 0
           total_qb = 0
-          daily_minutes = defaultdict(int)
 
           # -----------------------
           # 集計
           # -----------------------
           for issue in issues:
               body = issue.get("body") or ""
-              closed_at = issue.get("closed_at")
-              if not closed_at:
-                  continue
-
-              date = closed_at[:10]
 
               m_time = re.search(r"講義時間（分）[:：]\s*(\d+)", body)
               if m_time:
-                  minutes = int(m_time.group(1))
-                  total_minutes += minutes
-                  daily_minutes[date] += minutes
+                  total_minutes += int(m_time.group(1))
 
               m_qb = re.search(r"演習問数[:：]\s*(\d+)", body)
               if m_qb:
@@ -86,7 +81,7 @@ jobs:
               readme = f.read()
 
           # -----------------------
-          # 累積表示
+          # サマリー生成
           # -----------------------
           totals_block = f"""
 <div align="center">
@@ -108,31 +103,6 @@ jobs:
           )
 
           # -----------------------
-          # ヒートマップ生成
-          # -----------------------
-          if not daily_minutes:
-              daily_minutes = {"2026-01-01": 0}
-
-          heatmap_lines = "\n".join(
-              f"    {date} : {minutes}"
-              for date, minutes in sorted(daily_minutes.items())
-          )
-
-          heatmap_block = f"""```mermaid
-%%{{init: {{"theme": "base"}}}}%%
-calendar
-    title 学習ヒートマップ
-{heatmap_lines}
-```"""
-
-          readme = re.sub(
-              r"<!-- HEATMAP:START -->.*?<!-- HEATMAP:END -->",
-              f"<!-- HEATMAP:START -->\n{heatmap_block}\n<!-- HEATMAP:END -->",
-              readme,
-              flags=re.S
-          )
-
-          # -----------------------
           # 書き込み
           # -----------------------
           with open("README.md", "w", encoding="utf-8") as f:
@@ -146,5 +116,5 @@ calendar
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update README dashboard" || exit 0
+          git commit -m "Update README summary" || exit 0
           git push
