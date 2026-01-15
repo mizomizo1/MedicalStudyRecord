@@ -7,17 +7,20 @@ GitHub Issues × Projects × Actions で管理
 
 ## 📊 サマリー
 
+<!-- SUMMARY:START -->
 | 指標 | 値 |
 |---|---|
 | **総学習時間** | **128時間30分** |
 | 今週の学習時間 | 6時間30分 |
 | **QB 累計** | **1,240問** |
 | 今週のQB | 180問 |
+<!-- SUMMARY:END -->
 
 ---
 
 ## 📊 学習バランス（時間ベース）
 
+<!-- MATERIAL_TIME_CHART:START -->
 ```mermaid
 %%{init: {"theme": "base"}}%%
 xychart-beta
@@ -27,11 +30,19 @@ xychart-beta
     bar [42, 63]
 ````
 
+<!-- MATERIAL_TIME_CHART:END -->
+
 ---
 
 ## 🎥 Q-Assist（時間）
 
+<!-- QASSIST_TOTAL:START -->
+
 **累計：42時間**
+
+<!-- QASSIST_TOTAL:END -->
+
+<!-- QASSIST_CHART:START -->
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
@@ -43,11 +54,19 @@ pie
     "その他" : 5
 ```
 
+<!-- QASSIST_CHART:END -->
+
 ---
 
 ## 📘 Medilink（時間）
 
+<!-- MEDILINK_TOTAL:START -->
+
 **累計：63時間**
+
+<!-- MEDILINK_TOTAL:END -->
+
+<!-- MEDILINK_CHART:START -->
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
@@ -58,13 +77,21 @@ pie
     "マイナー" : 15
 ```
 
+<!-- MEDILINK_CHART:END -->
+
 ---
 
 ## 📝 QB（問題演習：問数ベース）
 
+<!-- QB_TOTAL:START -->
+
 **累計：1,240問**
 
+<!-- QB_TOTAL:END -->
+
 ### 科目別 問数
+
+<!-- QB_SUBJECT_CHART:START -->
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
@@ -75,7 +102,11 @@ xychart-beta
     bar [320, 210, 180, 150, 140, 240]
 ```
 
+<!-- QB_SUBJECT_CHART:END -->
+
 ### 週次 QB 演習数
+
+<!-- QB_WEEKLY_CHART:START -->
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
@@ -85,6 +116,8 @@ xychart-beta
     y-axis "問数" 0 --> 250
     bar [120, 160, 180]
 ```
+
+<!-- QB_WEEKLY_CHART:END -->
 
 ---
 
