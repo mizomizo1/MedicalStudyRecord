@@ -1,13 +1,14 @@
-name: "📺 Q-Assist（Medilink形式）"
-description: "Q-Assist 動画視聴（講座｜講義｜セクション）"
+name: "📺 Q-Assist"
+description: "Q-Assist 動画視聴（時間管理）"
 title: "Q-Assist｜"
-labels: [q-assist]
+labels:
+  - q-assist
 body:
   - type: input
     id: course
     attributes:
       label: 講座名
-      placeholder: 例）内科総論
+      placeholder: 内科総論
     validations:
       required: true
 
@@ -15,20 +16,32 @@ body:
     id: lecture
     attributes:
       label: 講義名
-      placeholder: 例）心不全
+      placeholder: 心不全
     validations:
       required: true
 
   - type: input
-    id: part
+    id: section
     attributes:
-      label: Part / セクション
-      placeholder: 例）Part2 治療 / 病態生理
+      label: セクション（任意）
+      placeholder: 治療 / 病態生理
     validations:
       required: false
 
-  - type: textarea
-    id: memo
+  - type: input
+    id: duration
     attributes:
-      label: メモ
-      placeholder: 国試に出そうなところ・引っかけポイント
+      label: 講義時間（分）
+      description: 数字のみ（例：45）
+      placeholder: 45
+    validations:
+      required: true
+
+  - type: textarea
+    id: fixed_format
+    attributes:
+      label: （自動集計用・変更しない）
+      value: |
+        講義時間（分）：45
+    validations:
+      required: true
