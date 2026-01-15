@@ -27,6 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
+          # 同じPython環境でrequestsを入れる（重要）
           python -m pip install requests
 
           python <<'EOF'
@@ -34,6 +35,9 @@ jobs:
           import re
           import requests
 
+          # =======================
+          # GitHub API 設定
+          # =======================
           token = os.environ["GITHUB_TOKEN"]
           repo = os.environ["REPO"]
 
@@ -42,14 +46,20 @@ jobs:
               "Accept": "application/vnd.github+json"
           }
 
-          # Issue取得（closed）
+          # =======================
+          # Issue 取得（closed）
+          # =======================
           issues = []
           page = 1
           while True:
               r = requests.get(
                   f"https://api.github.com/repos/{repo}/issues",
                   headers=headers,
-                  params={"state": "closed", "per_page": 100, "page": page}
+                  params={
+                      "state": "closed",
+                      "per_page": 100,
+                      "page": page
+                  }
               )
               data = r.json()
               if not data:
@@ -57,28 +67,42 @@ jobs:
               issues.extend(data)
               page += 1
 
-            total_minutes = 0
-            total_qb = 0
-            
-            for issue in issues:
-                body = issue.get("body") or ""
-            
-                # 講義時間（分）
-                m_time = re.search(r"講義時間（分）\s*\n\s*(\d+)", body)
-                if m_time:
-                    total_minutes += int(m_time.group(1))
-            
-                # QB 問数
-                m_qb = re.search(r"演習問数\s*\n\s*(\d+)", body)
-                if m_qb:
-                    total_qb += int(m_qb.group(1))
+          # =======================
+          # 集計
+          # =======================
+          total_minutes = 0
+          total_qb = 0
 
+          for issue in issues:
+              body = issue.get("body") or ""
+
+              # --- Q-Assist / Medilink：講義時間（分）
+              # Issue Form 形式：
+              # ### 講義時間（分）
+              # 45
+              m_time = re.search(r"講義時間（分）\s*\n\s*(\d+)", body)
+              if m_time:
+                  total_minutes += int(m_time.group(1))
+
+              # --- QB：演習問数
+              # Issue Form 形式：
+              # ### 演習問数
+              # 30
+              m_qb = re.search(r"演習問数\s*\n\s*(\d+)", body)
+              if m_qb:
+                  total_qb += int(m_qb.group(1))
 
           total_hours = round(total_minutes / 60, 1)
 
+          # =======================
+          # README 読み込み
+          # =======================
           with open("README.md", "r", encoding="utf-8") as f:
               readme = f.read()
 
+          # =======================
+          # サマリー生成
+          # =======================
           totals_block = (
               "<div align=\"center\">\n\n"
               "### 🧠 総学習時間  \n"
@@ -95,6 +119,9 @@ jobs:
               flags=re.S
           )
 
+          # =======================
+          # README 書き込み
+          # =======================
           with open("README.md", "w", encoding="utf-8") as f:
               f.write(readme)
 
