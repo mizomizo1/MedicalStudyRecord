@@ -7,11 +7,11 @@
 <!-- TOTALS:START -->
 <div align="center">
 
-### Total Learning Time
+### 🧠 総学習時間  
 <h1>1.9 <sub>h</sub></h1>
 
-### Question Bank  
-<h1>44 <sub>問</sub></h1>
+### 📝 QB 累計  
+<h1>144 <sub>問</sub></h1>
 
 </div>
 <!-- TOTALS:END -->
