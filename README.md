@@ -11,7 +11,7 @@
 <h1>1.9 <sub>h</sub></h1>
 
 ### 📝 QB 累計  
-<h1>205 <sub>問</sub></h1>
+<h1>238 <sub>問</sub></h1>
 
 </div>
 <!-- TOTALS:END -->
